@@ -11,6 +11,13 @@ The Movie Rating Splitter Service is a microservice that:
 ![Movie Rating Splitter Service](https://github.com/abnair2016/movie-rating-splitter/blob/master/movie-rating-splitter-service-overview-diagram.jpg)
 
 
+### Versions
+
+* Spring Boot: 1.5.12.RELEASE
+* Apache Camel: 2.21.0
+* Camel Kafka: 2.21.0
+* Kafka clients: 1.0.0
+
 ### Prerequisites
 
 In order to run locally you will need to have at least the following installed in your local development environment:
