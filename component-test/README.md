@@ -24,7 +24,7 @@ In order to run locally you will need to have at least the following installed i
 
 ### How do I set this up to run it (successfully)?
 
-1. Get the latest version of the project from GitHub
+1. Clone or download the project from GitHub: `git clone https://github.com/abnair2016/movie-rating-splitter.git`
 2. Navigate to movie-rating-splitter service root: `cd /path/to/movie-rating-splitter` and run the maven clean install command: `mvn -U clean install -DskipTests`
 3. Navigate to component-test directory: `cd /path/to/movie-rating-splitter/component-test`
 4. Run the component test using command: `mvn test -P component`
