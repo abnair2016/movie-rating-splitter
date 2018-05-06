@@ -1,0 +1,22 @@
+### Java ###
+**/*.log
+### Eclipse ###
+**/*.metadata
+**/bin/
+**/tmp/
+**/*.tmp
+**/*.bak
+**/*.swp
+**/.settings/
+**/.loadpath
+**/.project
+**/.classpath
+### Maven ###
+**/target/
+### IntelliJ ###
+**/*.iml
+**/.idea/
+**/*.ipr
+**/*.iws
+**/out/
+.DS_Store

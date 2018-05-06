@@ -1,0 +1,40 @@
+{
+  "title": "Superman",
+  "year": "1978",
+  "rated": "PG",
+  "released": "15 Dec 1978",
+  "runtime": "143 min",
+  "genre": "Action, Adventure, Drama",
+  "director": "Richard Donner",
+  "writer": "Jerry Siegel (character created by: Superman), Joe Shuster (character created by: Superman), Mario Puzo (story), Mario Puzo (screenplay), David Newman (screenplay), Leslie Newman (screenplay), Robert Benton (screenplay)",
+  "actors": "Marlon Brando, Gene Hackman, Christopher Reeve, Ned Beatty",
+  "plot": "An alien orphan is sent from his dying planet to Earth, where he grows up to become his adoptive home's first and greatest superhero.",
+  "language": "English",
+  "country": "USA, UK, Panama, Switzerland, Canada",
+  "awards": "Nominated for 3 Oscars. Another 17 wins & 18 nominations.",
+  "poster": "https://ia.media-imdb.com/images/M/MV5BOWU0ZGE4YjMtNmY5Yy00M2RhLWE0ZGQtZjViMTBhZTE5MWM4XkEyXkFqcGdeQXVyNjUwNzk3NDc@._V1_SX300.jpg",
+  "ratings": [
+    {
+      "source": "Internet Movie Database",
+      "value": "7.3/10"
+    },
+    {
+      "source": "Rotten Tomatoes",
+      "value": "93%"
+    },
+    {
+      "source": "Metacritic",
+      "value": "86/100"
+    }
+  ],
+  "metascore": "86",
+  "imdbRating": "7.3",
+  "imdbVotes": "139,336",
+  "imdbID": "tt0078346",
+  "type": "movie",
+  "dvd": "01 May 2001",
+  "boxOffice": "N/A",
+  "production": "Warner Bros. Pictures",
+  "website": "http://www2.warnerbros.com/superman/home.html",
+  "response": "True"
+}

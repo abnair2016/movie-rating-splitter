@@ -1,0 +1,39 @@
+#Application
+server:
+    port: 9999
+    address: 0.0.0.0
+
+spring:
+    application:
+        name: movie-rating-splitter-service
+    main:
+        banner-mode: "OFF"
+---
+
+#Spring monitoring
+management:
+    context-path: /monitoring
+---
+
+#Camel Spring Boot
+camel:
+    springboot:
+        main-run-controller: true
+
+    wireTap:
+        threadPoolConfig:
+            poolSize: 20
+            maxPoolSize: 50
+---
+
+#Kafka
+kafka:
+    endpoint: ${KAFKA_ENDPOINT}
+    consumer:
+        group:
+          id: ${GROUP_ID}
+        topic: ${READ_TOPIC}
+    producer:
+        topic: ${WRITE_TOPIC}
+
+namespace: ${NAMESPACE}
