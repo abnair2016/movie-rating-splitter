@@ -7,6 +7,8 @@ The Movie Rating Splitter Service is a microservice that:
 * Splits the Movie message by the ratings it has received to individual FilmRating messages
 * Produces to the film-ratings-message Kafka topic
 
+![Movie Rating Splitter Service](http://github.com/abnair2016/movie-rating-splitter-service-overview-diagram.jpg)
+
 ### Prerequisites
 
 In order to run locally you will need to have at least the following installed in your local development environment:
