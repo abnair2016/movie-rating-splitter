@@ -1,4 +1,4 @@
-# Component Testing with Kubernetes using Minikube: A Developer's Perspective
+# Component Testing with Kubernetes using Minikube: A Developer's Approach
 
 With the adoption of micro services architectures, modular components that need integration with core applications, an ever-growing need to be value-centric and delivering to business through CI / CD (continuous integration / continuous deployment), popularity of containerisation, orchestration  and cloud computing, Developers these days need to think beyond the realm of developing applications that are covered by unit tests alone. 
 
