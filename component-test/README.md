@@ -16,7 +16,7 @@ The motivation for this post is precisely to address this gap, using component t
 
 To elucidate how I incorporated component testing within my workflow, please refer to the sample project available on Github: http://www.github.com/abnair2016/movie-rating-splitter
 
-The rest of the blog details how I went about implementing a basic component test for the SUT. 
+Below are the details on how I went about implementing a basic component test for the SUT. 
 
 In our example, the `movie-rating-splitter` service (SUT) communicates with an external component i.e. Kafka.
  
