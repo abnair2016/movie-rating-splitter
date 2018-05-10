@@ -1,12 +1,12 @@
 # Component Testing with Kubernetes using Minikube: A Developer's Approach
 
-With the adoption of micro services architectures, modular components that need integration with core applications, an ever-growing need to be value-centric and delivering to business through CI / CD (continuous integration / continuous delivery), popularity of containerisation, orchestration  and cloud computing, Developers these days need to think beyond the realm of developing applications that are covered by unit tests alone. 
+With the adoption of microservices architectures, modular components that need integration with core applications, an ever-growing need to be value-centric and delivering to business through CI / CD (continuous integration / continuous delivery), popularity of containerisation, orchestration  and cloud computing, Developers these days need to think beyond the realm of developing applications that are covered by unit tests alone. 
 
 The requirement for a fail-fast feedback is becoming even more important, especially within an iterative development approach. 
 
-It is important to know whether the micro service being developed interacts with external components and behaves as expected "as a component" much earlier in the development process as opposed to an anomaly being identified later in the process closer to delivery i.e. once the micro service has already been developed and deployed and a behavioural anomaly caught during an end-to-end test. 
+It is important to know whether the microservice being developed interacts with external components and behaves as expected "as a component" much earlier in the development process as opposed to an anomaly being identified later in the process closer to delivery i.e. once the microservice has already been developed and deployed and a behavioural anomaly caught during an end-to-end test. 
 
-The motivation for this blog is precisely to address this gap, using component tests that can run against the micro service under test (SUT) that purely tests the SUT as a component even before it is deployed to the higher environments i.e. At least run one happy path component test locally to ensure that any new feature development has not changed the expected behaviour of the component as a whole. 
+The motivation for this blog is precisely to address this gap, using component tests that can run against the microservice under test (SUT) that purely tests the SUT as a component even before it is deployed to the higher environments i.e. At least run one happy path component test locally to ensure that any new feature development has not changed the expected behaviour of the component as a whole. 
 
 **Given:** A valid input
 
