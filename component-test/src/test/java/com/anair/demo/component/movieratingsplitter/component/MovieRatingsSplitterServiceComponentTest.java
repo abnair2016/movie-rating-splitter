@@ -83,8 +83,6 @@ public class MovieRatingsSplitterServiceComponentTest {
         LOGGER.info("===========================================================");
         LOGGER.info("Finished consuming ratings message from {} topic... Movie Ratings Splitter Test completed!", FILM_RATINGS_TOPIC);
         LOGGER.info("===========================================================");
-
-        MovieRatingsSplitterServiceProcess.stopIfRunning();
     }
 
     @Test
@@ -123,8 +121,6 @@ public class MovieRatingsSplitterServiceComponentTest {
         LOGGER.info("===========================================================");
         LOGGER.info("Finished consuming ratings message from {} topic... Movie Ratings Splitter Test completed!", FILM_RATINGS_TOPIC);
         LOGGER.info("===========================================================");
-
-        MovieRatingsSplitterServiceProcess.stopIfRunning();
     }
 
     @Test
@@ -163,8 +159,6 @@ public class MovieRatingsSplitterServiceComponentTest {
         LOGGER.info("===========================================================");
         LOGGER.info("Finished consuming ratings message from {} topic... Movie Ratings Splitter Test completed!", FILM_RATINGS_TOPIC);
         LOGGER.info("===========================================================");
-
-        MovieRatingsSplitterServiceProcess.stopIfRunning();
     }
 
     private void awaitUntilSuccessfulResponseReceivedFromMovieRatingsSplitterService() {
