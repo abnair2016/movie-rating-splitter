@@ -1,12 +1,12 @@
 # Component Testing with Kubernetes using Minikube: A Developer's Approach
 
-With the adoption of microservices architectures, modular components that need integration with core applications, an ever-growing need to be value-centric and delivering to business through CI / CD (continuous integration / continuous delivery), popularity of containerisation, orchestration  and cloud computing, Developers these days need to think beyond the realm of developing applications that are covered by unit tests alone. 
+The adoption of microservices architectures, modular components requiring integration, an ever-growing need to be value-centric and delivering to business through CI / CD (continuous integration / continuous delivery), popularity of containerisation, orchestration and cloud computing, developers these days need to think beyond the realm of developing applications that are covered by unit tests alone. 
 
-The requirement for a fail-fast feedback is becoming even more important, especially within an iterative development approach. 
+The requirement for a fail-fast feedback is becoming even more important, especially within an iterative development environment. 
 
-It is important to know whether the microservice being developed interacts with external components and behaves as expected "as a component" much earlier in the development process as opposed to an anomaly being identified later in the process closer to delivery i.e. once the microservice has already been developed and deployed and a behavioural anomaly caught during an end-to-end test. 
+It is important to know whether the microservice being developed interacts with external components and behaves as expected "as a component" much earlier in the delivery process as opposed to an anomaly being identified later in the process. i.e. once the microservice has already been developed and deployed and a behavioural anomaly caught during an end-to-end test. 
 
-The motivation for this post is precisely to address this gap, using component tests that can run against the microservice under test (SUT) that purely tests the SUT as a component even before it is deployed to the higher environments i.e. At least run one happy path component test locally to ensure that any new feature development has not changed the expected behaviour of the component as a whole. 
+The motivation for this post is precisely to address this gap by using component tests that can run against the microservice under test (SUT) that purely tests the SUT as a component even before it is deployed to the higher environments i.e. At least run one happy path component test locally to ensure that any new feature development has not changed the expected behaviour of the component as a whole. 
 
 **Given:** A valid input
 
@@ -14,19 +14,23 @@ The motivation for this post is precisely to address this gap, using component t
 
 **Then:** Assert the expected outputs against the actual outputs of the component.
 
-To elucidate how I incorporated component testing within my workflow, please refer to the sample project available on Github: http://www.github.com/abnair2016/movie-rating-splitter
+To elucidate how I incorporated component testing within my workflow, please refer to the sample [movie-rating-splitter](http://www.github.com/abnair2016/movie-rating-splitter) project.
 
 Below are the details on how I went about implementing a basic component test for the SUT. 
 
-In our example, the `movie-rating-splitter` service (SUT) communicates with an external component i.e. Kafka.
- 
- It `consumes` a valid input `Movie` message from one Kafka topic named `movie-message`, transforms and splits the input message to `FilmRating` messages and `produces` to another Kafka topic named `film-ratings-message`. 
- 
- Using this component testing approach, my main objective is to isolate the `movie-rating-splitter` service from the external component that it communicates with (i.e. Kafka) and run a test that asserts the response of the SUT, given a specific (set of) input(s).
+## About the Sample Project
 
-### What does this Component Test do?
+![Movie Rating Splitter Service](https://github.com/abnair2016/movie-rating-splitter/blob/master/movie-rating-splitter-service-overview-diagram.jpg)
 
-The Movie Rating Splitter Component test runs a Maven test that:
+In this sample project, the `movie-rating-splitter` service (SUT) communicates with an external component i.e. Kafka.
+ 
+It `consumes` a valid input `Movie` message from one Kafka topic named `movie-message`, transforms and splits the input message to `FilmRating` messages and `produces` to another Kafka topic named `film-ratings-message`. 
+ 
+Using this component testing approach, the main objective is to isolate the `movie-rating-splitter` service from the external component that it communicates with (i.e. Kafka) and run a test that asserts the response of the SUT, given a specific (set of) input(s).
+
+## What does this Component Test do?
+
+The `movie-rating-splitter` component test runs a Maven test that:
 * Deploys pods and exposes services on minikube for:
   * _Zookeeper + Kafka:_ To consume valid `Movie` message from the `movie-message` kafka topic
 * Runs the `movie-rating-splitter` service (SUT), as a Java Process
@@ -34,7 +38,7 @@ The Movie Rating Splitter Component test runs a Maven test that:
 * Pushes the response of the SUT i.e. `FilmRating` messages onto the `film-ratings-message` kafka topic
 * Verifies that the actual SUT output(s) by consuming from the `film-ratings-message` Kafka topic and asserting the expected counts of split `FilmRating` messages against the actual messages produced by the SUT onto the `film-ratings-message` topic.
 
-### Pre-requisites
+## Pre-requisites
 
 In order to run this test locally, you will need to have at least the following installed in your local development environment:
 
@@ -46,20 +50,18 @@ In order to run this test locally, you will need to have at least the following 
 * Java 1.8.0_XXX - Java8 openjdk or above
 * Oracle VirtualBox 5.0.40 or 5.1.18
 
-### How do I set this up to run it (successfully)?
+## How do I set this up to run it (locally)?
 
 1. Clone or download the project from GitHub: `git clone https://github.com/abnair2016/movie-rating-splitter.git`
 2. Navigate to movie-rating-splitter service root: `cd /path/to/movie-rating-splitter` and run the maven clean install command: `mvn -U clean install -DskipTests`
 3. Navigate to component-test directory: `cd /path/to/movie-rating-splitter/component-test`
 4. Run the component test using command: `mvn test -P component`
 
-### KUBERNETES SETUP USING MINIKUBE
+## Preparation
 
 The `component-test` module of the project has the following setups:
 
-### SETUPS:
-
-#### I. MINIKUBE:
+### 1. Minikube:
 
 1. The minikube setup script `minikube-startup.sh` runs everytime a `mvn test -P component` command is issued which will:
 
@@ -70,171 +72,175 @@ The `component-test` module of the project has the following setups:
 
 2. _**minikube-startup.sh**_
 
-```
-#!/bin/bash
-
-delete_all_minikube_resources() {
-   kubectl --context=minikube delete --all deployments
-   kubectl --context=minikube delete --all services
-}
-
-create_deployment_and_service() {
-    echo "Deploying ${1} pod"
-    kubectl apply -f "$deploymentsDirectory/${1}-deployment.yml"
-
-    echo "Deploying service for ${1}"
-    kubectl apply -f "$servicesDirectory/${1}-service.yml"
-}
-
-start_minikube() {
-    if [[ $(minikube status | grep -o "Running" 2>/dev/null | uniq) != "Running" ]]; then
-        minikube start --cpus 2 --memory 8192 --kubernetes-version v1.5.3
-        # Wait for cluster to start
-        echo "Waiting for cluster to start"
-        while [ "$ready" != "Running" ]; do
-            ready=$(minikube status | grep localkube | grep -o "Running")
-            sleep 10
-        done
-    fi
-}
-
-setup_topic() {
-    echo "Setting up kafka topic - started"
-    pod_name=$(kubectl get pods | awk '/kafka/{print$1}')
-
-    echo "/opt/kafka/bin/kafka-topics.sh --zookeeper 192.168.99.100:30181 --create --topic movie-message --partitions 1 --replication-factor 1" | kubectl exec "$pod_name" -it bash
-    echo "/opt/kafka/bin/kafka-topics.sh --zookeeper 192.168.99.100:30181 --create --topic film-ratings-message --partitions 1 --replication-factor 1" | kubectl exec "$pod_name" -it bash
+    ```
+    #!/bin/bash
+    
+    delete_all_minikube_resources() {
+       kubectl --context=minikube delete --all deployments
+       kubectl --context=minikube delete --all services
+    }
+    
+    create_deployment_and_service() {
+        echo "Deploying ${1} pod"
+        kubectl apply -f "$deploymentsDirectory/${1}-deployment.yml"
+    
+        echo "Deploying service for ${1}"
+        kubectl apply -f "$servicesDirectory/${1}-service.yml"
+    }
+    
+    start_minikube() {
+        if [[ $(minikube status | grep -o "Running" 2>/dev/null | uniq) != "Running" ]]; then
+            minikube start --cpus 2 --memory 8192 --kubernetes-version v1.5.3
+            # Wait for cluster to start
+            echo "Waiting for cluster to start"
+            while [ "$ready" != "Running" ]; do
+                ready=$(minikube status | grep localkube | grep -o "Running")
+                sleep 10
+            done
+        fi
+    }
+    
+    setup_topic() {
+        echo "Setting up kafka topic - started"
+        pod_name=$(kubectl get pods | awk '/kafka/{print$1}')
+    
+        echo "/opt/kafka/bin/kafka-topics.sh --zookeeper 192.168.99.100:30181 --create --topic movie-message --partitions 1 --replication-factor 1" | kubectl exec "$pod_name" -it bash
+        echo "/opt/kafka/bin/kafka-topics.sh --zookeeper 192.168.99.100:30181 --create --topic film-ratings-message --partitions 1 --replication-factor 1" | kubectl exec "$pod_name" -it bash
+        echo "==========================================================="
+        echo "List of available topics"
+        echo "==========================================================="
+        echo "/opt/kafka/bin/kafka-topics.sh --zookeeper 192.168.99.100:30181 --list" | kubectl exec "$pod_name" -it bash
+        echo "Setting up kafka topic - completed"
+    }
+    
     echo "==========================================================="
-    echo "List of available topics"
+    echo "Minikube setup started..."
     echo "==========================================================="
-    echo "/opt/kafka/bin/kafka-topics.sh --zookeeper 192.168.99.100:30181 --list" | kubectl exec "$pod_name" -it bash
-    echo "Setting up kafka topic - completed"
-}
+    # Switch context to minikube
+    echo "Switching context to minikube"
+    kubectl config use-context minikube
+    
+    # Kubernetes Variables
+    kubernetesDirectory="kubernetes"
+    servicesDirectory="$kubernetesDirectory/services"
+    deploymentsDirectory="$kubernetesDirectory/deployments"
+    initial_deployments=$( printf "zookeeper" | sort )
+    initial_deployments_names=$( printf "zookeeper" )
+    
+    echo "${1}"
+    
+    # Start minikube if not already running
+    start_minikube
+    
+    # Clean up minikube before starting the tests
+    echo "Deleting all existing minikube resources"
+    delete_all_minikube_resources
+    
+    # Pod / service deployments
+    for i in $(printf "$initial_deployments"); do
+        create_deployment_and_service "${i}"
+    done
+    
+    echo "Waiting for initial deployments to be ready..."
+    while [ "$ready" != "$initial_deployments_names" ]; do
+        sleep 5
+        ready=$(kubectl get deployments | awk '{if ($5==1) print $1 }' | sort)
+        printf "%0.s-" {1..1}
+    done
+    
+    echo "Setup of initial deployments - complete"
+    
+    # Set up kafka
+    create_deployment_and_service "kafka"
+    
+    echo "Waiting for kafka to be ready..."
+    while [ "$ready" != "started (kafka.server.KafkaServer)" ]; do
+        sleep 5
+        ready=$(kubectl logs `kubectl get pods | awk '/kafka/{print$1}'` | grep -o "started (kafka.server.KafkaServer)")
+        printf "%0.s-" {1..1}
+    done
+    
+    # Set up Kafka Topic
+    echo "Setting up kafka topic..."
+    setup_topic
+    
+    # Set docker env
+    echo "Setting docker env..."
+    eval $(minikube docker-env)
+    
+    # Open minikube dashboard
+    echo "Opening minikube dashboard..."
+    minikube dashboard &
+    
+    echo "==========================================================="
+    echo "Minikube setup completed."
+    echo "==========================================================="
+    
+    exit 0
+    ```
 
-echo "==========================================================="
-echo "Minikube setup started..."
-echo "==========================================================="
-# Switch context to minikube
-echo "Switching context to minikube"
-kubectl config use-context minikube
-
-# Kubernetes Variables
-kubernetesDirectory="kubernetes"
-servicesDirectory="$kubernetesDirectory/services"
-deploymentsDirectory="$kubernetesDirectory/deployments"
-initial_deployments=$( printf "zookeeper" | sort )
-initial_deployments_names=$( printf "zookeeper" )
-
-echo "${1}"
-
-# Start minikube if not already running
-start_minikube
-
-# Clean up minikube before starting the tests
-echo "Deleting all existing minikube resources"
-delete_all_minikube_resources
-
-# Pod / service deployments
-for i in $(printf "$initial_deployments"); do
-	create_deployment_and_service "${i}"
-done
-
-echo "Waiting for initial deployments to be ready..."
-while [ "$ready" != "$initial_deployments_names" ]; do
-	sleep 5
-	ready=$(kubectl get deployments | awk '{if ($5==1) print $1 }' | sort)
-	printf "%0.s-" {1..1}
-done
-
-echo "Setup of initial deployments - complete"
-
-# Set up kafka
-create_deployment_and_service "kafka"
-
-echo "Waiting for kafka to be ready..."
-while [ "$ready" != "started (kafka.server.KafkaServer)" ]; do
-	sleep 5
-	ready=$(kubectl logs `kubectl get pods | awk '/kafka/{print$1}'` | grep -o "started (kafka.server.KafkaServer)")
-	printf "%0.s-" {1..1}
-done
-
-# Set up Kafka Topic
-echo "Setting up kafka topic..."
-setup_topic
-
-# Set docker env
-echo "Setting docker env..."
-eval $(minikube docker-env)
-
-# Open minikube dashboard
-echo "Opening minikube dashboard..."
-minikube dashboard &
-
-echo "==========================================================="
-echo "Minikube setup completed."
-echo "==========================================================="
-
-exit 0
-```
-
-#### II. ZOOKEEPER:
+### 2. Zookeeper:
 
 1. Spins up a zookeeper pod in minikube using an image available on the internet (image used: digitalwonderland/zookeeper)
+
 2. _zookeeper-deployment.yml_
 
-```
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  labels:
-    app: zookeeper
-  name: zookeeper
-spec:
-  replicas: 1
-  template:
+    ```
+    apiVersion: extensions/v1beta1
+    kind: Deployment
     metadata:
       labels:
         app: zookeeper
+      name: zookeeper
     spec:
-      containers:
-      - name: zookeeper
-        image: digitalwonderland/zookeeper
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 2181
-        resources:
-          limits:
-            cpu: 1
-            memory: 1Gi
-          requests:
-            cpu: 200m
-            memory: 400Mi
-```
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: zookeeper
+        spec:
+          containers:
+          - name: zookeeper
+            image: digitalwonderland/zookeeper
+            imagePullPolicy: IfNotPresent
+            ports:
+            - containerPort: 2181
+            resources:
+              limits:
+                cpu: 1
+                memory: 1Gi
+              requests:
+                cpu: 200m
+                memory: 400Mi
+    ```
+
 3. _zookeeper-service.yml_
 
-```
-apiVersion: v1
-kind: Service
-metadata:
-  name: zookeeper-service
-  labels:
-    app: zookeeper-service
-spec:
-  ports:
-  - port: 2181
-    name: zookeeper-port
-    targetPort: 2181
-    nodePort: 30181
-    protocol: TCP
-  selector:
-    app: zookeeper
-  type: NodePort
-```
+    ```
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: zookeeper-service
+      labels:
+        app: zookeeper-service
+    spec:
+      ports:
+      - port: 2181
+        name: zookeeper-port
+        targetPort: 2181
+        nodePort: 30181
+        protocol: TCP
+      selector:
+        app: zookeeper
+      type: NodePort
+    ```
+
 4. Exposes the Zookeeper service on port number `30181`
 
-#### III. KAFKA:
+### 3. Kafka:
 
 1. Spins up a Kafka pod in minikube using an image available on the internet (image used: wurstmeister/kafka)
+
 2. _kafka-deployment.yml_
 
     ```
@@ -278,6 +284,7 @@ spec:
                 cpu: 500m
                 memory: 1024Mi
     ```
+
 3. _kafka-service.yml_
 
     ```
@@ -298,9 +305,10 @@ spec:
         app: kafka
       type: NodePort
     ```
+
 4. Exposes the Kafka service on port number `30092`
 
-#### IV. SUT JAVA PROCESS
+## SUT as a Java Process
 
 ```
 import com.google.common.collect.ImmutableMap;
@@ -326,7 +334,7 @@ public class MovieRatingsSplitterServiceProcess {
     private static Process process;
     private String jarFilePath = "../service/target";
     private String regexFile = "movie-rating-splitter-service-\\d+\\.\\d+\\.\\d+-SNAPSHOT\\.jar";
-    private final Map<String, String> environmentVars = new HashMap<String, String>() {{
+    private final Map<String, String> environmentVars = new HashMap<String, String>() {
         put("KAFKA_SECURITY_PROTOCOL", "PLAINTEXT");
         put("KAFKA_SESSION_TIMEOUT_MS", "120000");
         put("KAFKA_REQUEST_TIMEOUT_MS", "180000");
@@ -342,8 +350,7 @@ public class MovieRatingsSplitterServiceProcess {
         put("NAMESPACE","minikube");
         put("READ_TOPIC",READ_TOPIC);
         put("WRITE_TOPIC",WRITE_TOPIC);
-
-    }};
+    };
 
     private static MovieRatingsSplitterServiceProcess getInstance() {
         return new MovieRatingsSplitterServiceProcess();
@@ -421,7 +428,7 @@ public class MovieRatingsSplitterServiceProcess {
 }
 ```
 
-#### V. COMPONENT TESTS
+## Component Tests
 
 ```
 import io.restassured.RestAssured;
@@ -698,25 +705,26 @@ public class MovieRatingsSplitterServiceComponentTest {
 }
 ```
 
-### SUMMARY
+## Summary
 
-To summarise, the Movie Rating Splitter Service component test does the following:
-* Switches to minikube context
+The `movie-rating-splitter` service component tests perform the following steps:
+* Switches to `minikube` context
 * Starts up minikube if it is not running already
 * Deletes all existing deployments and services currently running on minikube
 * Creates the below listed initial deployments and exposes their respective services:
-    * Zookeeper to interact with Kafka
-    * Once the Zookeeper deployment is running, creates the kafka deployment and service
+    * `zookeeper` to interact with `kafka`
+    * Once the `zookeeper` deployment is running, creates the `kafka` deployment and service
 * Opens the minikube dashboard to give the user a visual representation of the running minikube pods and services that were created
-* Runs the Component Test
+* Starts the actual `movie-rating-splitter` microservice as a Java process 
+* Runs the Component Tests
 
-### F.A.Q
+## F.A.Q.
 
-#### 1. My Minikube hangs or errors out saying "Insufficient memory"?
+### 1. My Minikube hangs or errors out saying "Insufficient memory"?
 
 Run the `minikube delete` command to delete the minikube instance and re-run the component test using command: `mvn test -P component`. This should fix the memory issue.
 
-#### 2. I keep getting `LEADER NOT AVAILABLE` when running the test?
+### 2. I keep getting `LEADER NOT AVAILABLE` when running the test?
 
 Potential resolutions have been documented here: https://stackoverflow.com/questions/45748536/kafka-inaccessible-once-inside-kubernetes-minikube/48856311#48856311
 
