@@ -8,7 +8,7 @@ The Movie Rating Splitter Service is a microservice that:
 * Produces to the film-ratings-message Kafka topic
 
 
-![Movie Rating Splitter Service](https://github.com/abnair2016/movie-rating-splitter/blob/master/movie-rating-splitter-service-overview-diagram.jpg)
+![Movie Rating Splitter Service](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/movie-rating-splitter-service-overview-diagram.png)
 
 
 ### Versions

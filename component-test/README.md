@@ -1,12 +1,13 @@
 # Component Testing with Kubernetes using Minikube: A Developer's Approach
 
-The adoption of microservices architectures, modular components requiring integration, an ever-growing need to be value-centric and delivering to business through CI / CD (continuous integration / continuous delivery), popularity of containerisation, orchestration and cloud computing, developers these days need to think beyond the realm of developing applications that are covered by unit tests alone. 
 
-The requirement for a fail-fast feedback is becoming even more important, especially within an iterative development environment. 
+The adoption of microservice(s) architectures, modular components requiring integrations, an ever-growing need to be delivering value to business through CI / CD (continuous integration / continuous delivery), popularity of containerisation, orchestration and cloud computing have all been factors that have contributed towards Developers these days requiring to think beyond the realm of developing applications that are covered by unit tests alone. 
 
-It is important to know whether the microservice being developed interacts with external components and behaves as expected "as a component" much earlier in the delivery process as opposed to an anomaly being identified later in the process. i.e. once the microservice has already been developed and deployed and a behavioural anomaly caught during an end-to-end test. 
+The requirement for achieving a fail-fast system is becoming even more important, especially within an iterative development environment. 
 
-The motivation for this post is precisely to address this gap by using component tests that can run against the microservice under test (SUT) that purely tests the SUT as a component even before it is deployed to the higher environments i.e. At least run one happy path component test locally to ensure that any new feature development has not changed the expected behaviour of the component as a whole. 
+It is important to know whether the microservice(s) being developed, interacts with external components and behaves as expected "as a component" much earlier in the delivery process as opposed to an anomaly being identified later, which in turn translates to wastage of time, resources and budgets. 
+
+The motivation for this post is precisely to address this requirement by using component tests that can run against the microservice under test (SUT) that purely tests the SUT as a component even before it is deployed to any higher environments i.e. At least run one happy path component test locally to ensure that any new feature development has not changed the expected behaviour of the component as a whole. 
 
 **Given:** A valid input
 
@@ -18,11 +19,11 @@ Below are the details on how I went about implementing a basic component test fo
 
 ## Sample Project
 
-To elucidate how I incorporated component testing within my workflow, please refer to the sample <a href="http://www.github.com/abnair2016/movie-rating-splitter" target="_blank">movie-rating-splitter</a> project.
+To elucidate how I incorporated component testing within my workflow, please refer to the <a href="http://www.github.com/abnair2016/movie-rating-splitter" target="_blank">movie-rating-splitter</a> sample project.
 
-![Movie Rating Splitter Service](https://github.com/abnair2016/movie-rating-splitter/blob/master/movie-rating-splitter-service-overview-diagram.jpg)
+![Movie Rating Splitter Service](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/movie-rating-splitter-service-overview-diagram.png){: .centered }
 
-In this sample project, the `movie-rating-splitter` service (SUT) communicates with an external component i.e. Kafka.
+In this project, the `movie-rating-splitter` service (SUT) communicates with an external component i.e. Kafka.
  
 It `consumes` a valid input `Movie` message from one Kafka topic named `movie-message`, transforms and splits the input message to `FilmRating` messages and `produces` to another Kafka topic named `film-ratings-message`. 
  
@@ -32,11 +33,10 @@ Using this component testing approach, the main objective is to isolate the `mov
 
 The `movie-rating-splitter` component test runs a Maven test that:
 * Deploys pods and exposes services on minikube for:
-  * _Zookeeper + Kafka:_ To consume valid `Movie` message from the `movie-message` kafka topic
+  * _Zookeeper + Kafka:_ To consume from and produce to kafka topics
 * Runs the `movie-rating-splitter` service (SUT), as a Java Process
 * Pushes a valid `Movie` message onto the `movie-message` Kafka topic
-* Pushes the response of the SUT i.e. `FilmRating` messages onto the `film-ratings-message` kafka topic
-* Verifies that the actual SUT output(s) by consuming from the `film-ratings-message` Kafka topic and asserting the expected counts of split `FilmRating` messages against the actual messages produced by the SUT onto the `film-ratings-message` topic.
+* Verifies the response from the SUT by consuming from the `film-ratings-message` Kafka topic and asserting the expected counts of split `FilmRating` messages against the actual messages produced by the SUT onto the `film-ratings-message` topic.
 
 ## Pre-requisites
 
@@ -68,7 +68,11 @@ The `component-test` module of the project has the following setups:
     * Start minikube if not already running
     * Delete all existing deployments and services in minikube
     * Install afresh the pods and services required for the component test
-    * Recreate the topics required for the component test
+    * Creates the topics required for the component test
+    * Lists the topics that were created
+    * Opens the minikube dashboard GUI (Screenshot below)
+
+![Minikube Dashboard Review](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/minikube-dashboard-screenshot.png){: .centered }
 
 2. _**minikube-startup.sh**_
 
@@ -514,8 +518,6 @@ public class MovieRatingsSplitterServiceComponentTest {
         LOGGER.info("===========================================================");
         LOGGER.info("Finished consuming ratings message from {} topic... Movie Ratings Splitter Test completed!", FILM_RATINGS_TOPIC);
         LOGGER.info("===========================================================");
-
-        MovieRatingsSplitterServiceProcess.stopIfRunning();
     }
 
     @Test
@@ -554,8 +556,6 @@ public class MovieRatingsSplitterServiceComponentTest {
         LOGGER.info("===========================================================");
         LOGGER.info("Finished consuming ratings message from {} topic... Movie Ratings Splitter Test completed!", FILM_RATINGS_TOPIC);
         LOGGER.info("===========================================================");
-
-        MovieRatingsSplitterServiceProcess.stopIfRunning();
     }
 
     @Test
@@ -594,8 +594,6 @@ public class MovieRatingsSplitterServiceComponentTest {
         LOGGER.info("===========================================================");
         LOGGER.info("Finished consuming ratings message from {} topic... Movie Ratings Splitter Test completed!", FILM_RATINGS_TOPIC);
         LOGGER.info("===========================================================");
-
-        MovieRatingsSplitterServiceProcess.stopIfRunning();
     }
 
     private void awaitUntilSuccessfulResponseReceivedFromMovieRatingsSplitterService() {
@@ -705,6 +703,22 @@ public class MovieRatingsSplitterServiceComponentTest {
 }
 ```
 
+## How can I verify the Component Tests ran successfully?
+
+You can review whether the Component Tests ran successfully in the logs (Screenshot below)
+
+![Component tests success log screenshot](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/component-test-success-log.png){: .centered }
+
+Secondly, you can review the details of the message(s) consumed and produced after the Component Tests have run using <a href="http://www.kafkatool.com" target="_blank">Kafka Tool</a>, an intuitive and free GUI application for managing and using Apache Kafka clusters.
+
+Below is a Kafka Tool screenshot of the message(s) consumed from the `movie-message` topic:
+
+![Kafka tool screenshot of messages in movie-message topic](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/kafka-tool-screenshot-movie-message-topic.png){: .centered }
+
+Below is a Kafka Tool screenshot of the message(s) consumed from the `film-ratings-message` topic:
+
+![Kafka tool screenshot of messages in film-ratings-message topic](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/kafka-tool-screenshot-film-ratings-message-topic.png){: .centered }
+
 ## Summary
 
 The `movie-rating-splitter` service component tests perform the following steps:
@@ -726,7 +740,7 @@ Run the `minikube delete` command to delete the minikube instance and re-run the
 
 ### 2. I keep getting `LEADER NOT AVAILABLE` when running the test?
 
-Potential resolutions have been documented in <a href="https://stackoverflow.com/questions/45748536/kafka-inaccessible-once-inside-kubernetes-minikube/48856311#48856311" target="_blank">Stack Overflow</a>.
+I have documented some of the potential resolutions in <a href="https://stackoverflow.com/questions/45748536/kafka-inaccessible-once-inside-kubernetes-minikube/48856311#48856311" target="_blank">Stack Overflow</a>.
 
 Please ensure you check the versions as listed below:
 1. **Kubernetes Client and Server versions:** Use command: kubectl version. We have tested in kubernetes client versions v1.5.3 and v1.7.0 successfully and we force minikube to start on a supported compatible kubernetes server version v1.5.3. However, if your server version displays a version other than this, that could be the reason for the error.
