@@ -44,9 +44,7 @@ In order to run this test locally, you will need to have at least the following 
 
 * IntelliJ Community Edition 2016.3.5 or above
 * Maven 3.3.9 or above
-* Minikube v0.17.1 or v0.21.0
-* Kubernetes client version v1.5.3 or v1.7.0 
-* Kubernetes server version v1.5.3 
+* Minikube v0.17.1 (running Kubernetes client and server versions v1.5.3) or Minikube v0.21.0 (running Kubernetes client and server versions v1.7.0)
 * Java 1.8.0_XXX - Java8 openjdk or above
 * Oracle VirtualBox 5.0.40 or 5.1.18
 
@@ -709,7 +707,7 @@ You can review whether the Component Tests ran successfully in the logs (Screens
 
 ![Component tests success log screenshot](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/component-test-success-log.png)
 
-Secondly, you can review the details of the message(s) consumed and produced after the Component Tests have run using <a href="http://www.kafkatool.com" target="_blank">Kafka Tool</a>, an intuitive and free GUI application for managing and using Apache Kafka clusters.
+You can also review the details of the message(s) consumed and produced after the Component Tests have run using <a href="http://www.kafkatool.com" target="_blank">Kafka Tool</a>, an intuitive and free GUI application for managing and using Apache Kafka clusters.
 
 Below is a Kafka Tool screenshot of the message(s) consumed from the `movie-message` topic:
 
