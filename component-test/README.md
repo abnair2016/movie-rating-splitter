@@ -713,7 +713,7 @@ Below is a Kafka Tool screenshot of the message(s) consumed from the `movie-mess
 
 ![Kafka tool screenshot of messages in movie-message topic](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/kafka-tool-screenshot-movie-message-topic.png)
 
-Below is a Kafka Tool screenshot of the message(s) consumed from the `film-ratings-message` topic:
+Below is a Kafka Tool screenshot of the message(s) produced to the `film-ratings-message` topic:
 
 ![Kafka tool screenshot of messages in film-ratings-message topic](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/kafka-tool-screenshot-film-ratings-message-topic.png)
 
