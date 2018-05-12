@@ -741,6 +741,6 @@ Run the `minikube delete` command to delete the minikube instance and re-run the
 I have documented some of the potential resolutions in <a href="https://stackoverflow.com/questions/45748536/kafka-inaccessible-once-inside-kubernetes-minikube/48856311#48856311" target="_blank">Stack Overflow</a>.
 
 Please ensure you check the versions as listed below:
-1. **Kubernetes Client and Server versions:** Use command: kubectl version. We have tested in kubernetes client versions v1.5.3 and v1.7.0 successfully and we force minikube to start on a supported compatible kubernetes server version v1.5.3. However, if your server version displays a version other than this, that could be the reason for the error.
+1. **Kubernetes Client and Server versions:** Use command: `kubectl version`. We have tested in kubernetes client versions v1.5.3 and v1.7.0 successfully and we force minikube to start on a supported compatible kubernetes server version v1.5.3. However, if your server version displays a version other than this, that could be the reason for the error.
 2. **VirtualBox version:** We have tested in VirtualBox versions 5.0.40 and 5.1.18 successfully.
-3. **Minikube version:** Use command: minikube version. We have tested in minikube versions v0.17.1 and v0.21.0 successfully.
+3. **Minikube version:** Use command: `minikube version`. We have tested in minikube versions v0.17.1 and v0.21.0 successfully.
