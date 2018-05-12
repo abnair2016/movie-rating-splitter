@@ -14,11 +14,11 @@ The motivation for this post is precisely to address this gap by using component
 
 **Then:** Assert the expected outputs against the actual outputs of the component.
 
-To elucidate how I incorporated component testing within my workflow, please refer to the sample [movie-rating-splitter](http://www.github.com/abnair2016/movie-rating-splitter) project.
-
 Below are the details on how I went about implementing a basic component test for the SUT. 
 
-## About the Sample Project
+## Sample Project
+
+To elucidate how I incorporated component testing within my workflow, please refer to the sample <a href="http://www.github.com/abnair2016/movie-rating-splitter" target="_blank">movie-rating-splitter</a> project.
 
 ![Movie Rating Splitter Service](https://github.com/abnair2016/movie-rating-splitter/blob/master/movie-rating-splitter-service-overview-diagram.jpg)
 
@@ -181,7 +181,7 @@ The `component-test` module of the project has the following setups:
 
 ### 2. Zookeeper:
 
-1. Spins up a zookeeper pod in minikube using an image available on the internet (image used: digitalwonderland/zookeeper)
+1. Spins up a zookeeper pod in minikube using an image available on the internet (image used: `digitalwonderland/zookeeper`)
 
 2. _zookeeper-deployment.yml_
 
@@ -239,7 +239,7 @@ The `component-test` module of the project has the following setups:
 
 ### 3. Kafka:
 
-1. Spins up a Kafka pod in minikube using an image available on the internet (image used: wurstmeister/kafka)
+1. Spins up a Kafka pod in minikube using an image available on the internet (image used: `wurstmeister/kafka`)
 
 2. _kafka-deployment.yml_
 
@@ -726,7 +726,7 @@ Run the `minikube delete` command to delete the minikube instance and re-run the
 
 ### 2. I keep getting `LEADER NOT AVAILABLE` when running the test?
 
-Potential resolutions have been documented here: https://stackoverflow.com/questions/45748536/kafka-inaccessible-once-inside-kubernetes-minikube/48856311#48856311
+Potential resolutions have been documented in <a href="https://stackoverflow.com/questions/45748536/kafka-inaccessible-once-inside-kubernetes-minikube/48856311#48856311" target="_blank">Stack Overflow</a>.
 
 Please ensure you check the versions as listed below:
 1. **Kubernetes Client and Server versions:** Use command: kubectl version. We have tested in kubernetes client versions v1.5.3 and v1.7.0 successfully and we force minikube to start on a supported compatible kubernetes server version v1.5.3. However, if your server version displays a version other than this, that could be the reason for the error.
