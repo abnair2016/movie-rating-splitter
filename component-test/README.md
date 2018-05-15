@@ -1,13 +1,22 @@
 # Component Testing with Kubernetes using Minikube: A Developer's Approach
 
 
-The adoption of microservice(s) architectures, modular components requiring integrations, an ever-growing need to be delivering value to business through CI / CD (continuous integration / continuous delivery), popularity of containerisation, orchestration and cloud computing have all been factors that have contributed towards Developers these days requiring to think beyond the realm of developing applications that are covered by unit tests alone. 
+Developers these days need to think beyond the realm of developing applications that are covered by unit tests alone.
+
+Some of the factors that have contributed towards this are:
+
+* Adoption of microservice(s) architectures
+* Multiple modular component integrations with the core app
+* Ever-growing need to deliver value to business through CI / CD (continuous integration / continuous delivery)
+* Popularity of containerisation technologies (Docker, Rocket, etc.)
+* Orchestration of containers (Kubernetes, Mesos, Docker Swarm, etc.)
+* Cloud computing
 
 The requirement for achieving a fail-fast system is becoming even more important, especially within an iterative development environment. 
 
 It is important to know whether the microservice(s) being developed, interacts with external components and behaves as expected "as a component" much earlier in the delivery process as opposed to an anomaly being identified later, which in turn translates to wastage of time, resources and budgets. 
 
-The motivation for this post is precisely to address this requirement by using component tests that can run against the microservice under test (SUT) that purely tests the SUT as a component even before it is deployed to any higher environments i.e. At least run one happy path component test locally to ensure that any new feature development has not changed the expected behaviour of the component as a whole. 
+The motivation for this post is precisely to address this requirement by using component tests that can run against the service under test (SUT) that purely tests the SUT as a component even before it is deployed to any higher environments i.e. At least run one happy path component test locally to ensure that any new feature development has not changed the expected behaviour of the component as a whole. 
 
 **Given:** A valid input
 
@@ -23,7 +32,7 @@ To elucidate how I incorporated component testing within my workflow, please ref
 
 ![Movie Rating Splitter Service](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/movie-rating-splitter-service-overview-diagram.png)
 
-In this project, the `movie-rating-splitter` service (SUT) communicates with an external component i.e. Kafka.
+In this project, the `movie-rating-splitter` service (SUT) communicates with an external component i.e. [Kafka](https://kafka.apache.org).
  
 It `consumes` a valid input `Movie` message from one Kafka topic named `movie-message`, transforms and splits the input message to `FilmRating` messages and `produces` to another Kafka topic named `film-ratings-message`. 
  

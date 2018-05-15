@@ -16,7 +16,7 @@ public final class SplitterHelper {
     }
 
     public static boolean isNotEmpty(final Object object) {
-        return !ObjectUtils.isEmpty(object);
+        return !isEmpty(object);
     }
 
     public static boolean isEmpty(final Object object) {
@@ -30,5 +30,4 @@ public final class SplitterHelper {
         Map<?, ?> configsMap = new HashMap<>(configs);
         return Joiner.on("&").withKeyValueSeparator("=").join(configsMap);
     }
-
 }
