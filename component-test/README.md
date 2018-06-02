@@ -1,36 +1,31 @@
 # Component Testing with Kubernetes using Minikube: A Developer's Approach
 
-
 Developers these days need to think beyond the realm of developing applications that are covered by unit tests alone.
 
 Some of the factors that have contributed towards this are:
 
-* Adoption of microservice(s) architectures
-* Multiple modular component integrations with the core app
-* Ever-growing need to deliver value to business through CI / CD (continuous integration / continuous delivery)
+* Adoption of microservices architectures
+* Modular components that need integration with the core app
+* An ever-growing need to deliver value to business through CI / CD (continuous integration / continuous delivery)
 * Popularity of containerisation technologies (Docker, Rocket, etc.)
 * Orchestration of containers (Kubernetes, Mesos, Docker Swarm, etc.)
-* Cloud computing
+* Cloud computing 
 
 The requirement for achieving a fail-fast system is becoming even more important, especially within an iterative development environment. 
 
-It is important to know whether the microservice(s) being developed, interacts with external components and behaves as expected "as a component" much earlier in the delivery process as opposed to an anomaly being identified later, which in turn translates to wastage of time, resources and budgets. 
+It is important to know whether the microservices being developed, interact with external services and behave as expected much earlier in the delivery process, as opposed to being identified as an anomaly later, which then leads to wastage of time, resources and budgets. 
 
-The motivation for this post is precisely to address this requirement by using component tests that can run against the service under test (SUT) that purely tests the SUT as a component even before it is deployed to any higher environments i.e. At least run one happy path component test locally to ensure that any new feature development has not changed the expected behaviour of the component as a whole. 
+The motivation for this post is to address this requirement by using component tests that can run against the service under test (SUT) that purely tests the SUT as a component even before it is deployed to any higher environments i.e. At least run one happy path component test locally to ensure that any new feature development has not changed the expected behaviour of the component as a whole. 
 
-**Given:** A valid input
-
-**When:** The input is ingested into the component 
-
-**Then:** Assert the expected outputs against the actual outputs of the component.
+**Given** A valid input, **when** the input is ingested into the component, **then** assert that actual outputs of the component match the expected outputs.
 
 Below are the details on how I went about implementing a basic component test for the SUT. 
 
 ## Sample Project
 
-To elucidate how I incorporated component testing within my workflow, please refer to the <a href="http://www.github.com/abnair2016/movie-rating-splitter" target="_blank">movie-rating-splitter</a> sample project.
+To explain how I incorporated component testing within my workflow, please refer to the <a href="http://www.github.com/abnair2016/movie-rating-splitter" target="_blank">movie-rating-splitter</a> sample project.
 
-![Movie Rating Splitter Service](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/movie-rating-splitter-service-overview-diagram.png)
+![Movie Rating Splitter Service](/images/2018-05-11-component-test-with-kubernetes-using-minikube/movie-rating-splitter-service-overview-diagram.png){: .centered.medium-8 }
 
 In this project, the `movie-rating-splitter` service (SUT) communicates with an external component i.e. [Kafka](https://kafka.apache.org).
  
@@ -51,15 +46,18 @@ The `movie-rating-splitter` component test runs a Maven test that:
 
 In order to run this test locally, you will need to have at least the following installed in your local development environment:
 
-* IntelliJ Community Edition 2016.3.5 or above
+* Install a Hypervisor and kubectl <a href="https://kubernetes.io/docs/tasks/tools/install-minikube/" target="_blank">before you install minikube</a>
+* Oracle VirtualBox <a href="https://www.virtualbox.org/wiki/Download_Old_Builds_5_0" target="_blank">5.0.40</a> or <a href="https://www.virtualbox.org/wiki/Download_Old_Builds_5_1" target="_blank">5.1.18</a>
+* Download and install <a href="https://github.com/kubernetes/minikube/releases?after=v0.18.0&imz_s=6ovs8p10hf83drsbic3j852ce2" target="_blank">minikube v0.17.1</a>
+* Minikube v0.17.1 (runs Kubernetes client and server versions v1.5.3) or Minikube v0.21.0 (runs Kubernetes client and server versions v1.7.0)
 * Maven 3.3.9 or above
-* Minikube v0.17.1 (running Kubernetes client and server versions v1.5.3) or Minikube v0.21.0 (running Kubernetes client and server versions v1.7.0)
 * Java 1.8.0_XXX - Java8 openjdk or above
-* Oracle VirtualBox 5.0.40 or 5.1.18
 
 ## How do I set this up to run it (locally)?
 
-1. Clone or download the project from GitHub: `git clone https://github.com/abnair2016/movie-rating-splitter.git`
+1. Clone the project from GitHub: 
+
+    `git clone https://github.com/abnair2016/movie-rating-splitter.git`
 2. Navigate to movie-rating-splitter service root: `cd /path/to/movie-rating-splitter` and run the maven clean install command: `mvn -U clean install -DskipTests`
 3. Navigate to component-test directory: `cd /path/to/movie-rating-splitter/component-test`
 4. Run the component test using command: `mvn test -P component`
@@ -74,12 +72,12 @@ The `component-test` module of the project has the following setups:
 
     * Start minikube if not already running
     * Delete all existing deployments and services in minikube
-    * Install afresh the pods and services required for the component test
+    * Install the pods and services required for the component test
     * Creates the topics required for the component test
     * Lists the topics that were created
     * Opens the minikube dashboard GUI (Screenshot below)
 
-![Minikube Dashboard Review](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/minikube-dashboard-screenshot.png)
+    ![Minikube Dashboard Review](/images/2018-05-11-component-test-with-kubernetes-using-minikube/minikube-dashboard-screenshot.png){: .centered }
 
 2. _**minikube-startup.sh**_
 
@@ -825,21 +823,23 @@ public class MovieRatingsSplitterServiceComponentTest {
 }
 ```
 
-## How can I review all the messages sent to Kafka topics after the Component Tests have run?
+## How can I review the Component Tests?
 
 You can review whether the Component Tests ran successfully in the logs (Screenshot below)
 
-![Component tests success log screenshot](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/component-test-success-log.png)
+![Component tests success log screenshot](/images/2018-05-11-component-test-with-kubernetes-using-minikube/component-test-success-log.png){: .centered }
 
-You can also review the details of the message(s) consumed and produced after the Component Tests have run using <a href="http://www.kafkatool.com" target="_blank">Kafka Tool</a>, an intuitive and free GUI application for managing and using Apache Kafka clusters.
+You can also review the details of the message(s) consumed and produced after the Component Tests have run using <a href="http://www.kafkatool.com" target="_blank">Kafka Tool</a>, a free GUI application for managing and using Apache Kafka clusters.
 
 Below is a Kafka Tool screenshot of the message(s) consumed from the `movie-message` topic:
 
-![Kafka tool screenshot of messages in movie-message topic](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/kafka-tool-screenshot-movie-message-topic.png)
+![Kafka tool screenshot of messages in movie-message topic](/images/2018-05-11-component-test-with-kubernetes-using-minikube/kafka-tool-screenshot-movie-message-topic.png){: .centered }
 
 Below is a Kafka Tool screenshot of the message(s) produced to the `film-ratings-message` topic:
 
-![Kafka tool screenshot of messages in film-ratings-message topic](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/kafka-tool-screenshot-film-ratings-message-topic.png)
+![Kafka tool screenshot of messages in film-ratings-message topic](/images/2018-05-11-component-test-with-kubernetes-using-minikube/kafka-tool-screenshot-film-ratings-message-topic.png){: .centered }
+
+As you can see from these screenshots of the messages consumed and produced, it's quite intuitive.
 
 ## Summary
 
