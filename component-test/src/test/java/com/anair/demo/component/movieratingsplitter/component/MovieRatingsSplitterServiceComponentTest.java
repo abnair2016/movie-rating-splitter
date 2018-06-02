@@ -257,13 +257,11 @@ public class MovieRatingsSplitterServiceComponentTest {
     }
 
     private FilmRating toFilmRating(final String filmRatingAsString) {
-        FilmRating filmRating;
         try {
-            filmRating = JSONUtil.fromJsonString(filmRatingAsString, FilmRating.class);
+            return JSONUtil.fromJsonString(filmRatingAsString, FilmRating.class);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
-        return filmRating;
     }
 
     private void awaitUntilSuccessfulResponseReceivedFromMovieRatingsSplitterService() {
