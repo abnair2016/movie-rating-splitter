@@ -4,7 +4,6 @@ import com.anair.demo.component.movieratingsplitter.config.SplitterConfig;
 import com.anair.demo.component.movieratingsplitter.service.MessageProcessor;
 import com.anair.demo.component.movieratingsplitter.service.RatingsTransformer;
 import org.apache.camel.LoggingLevel;
-import org.apache.camel.builder.RouteBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,13 +11,17 @@ import static com.anair.demo.component.movieratingsplitter.util.SplitterConstant
 import static com.anair.demo.component.movieratingsplitter.util.SplitterHelper.buildURIParamsUsing;
 
 @Component
-public class SplitterRoute extends RouteBuilder {
+public class SplitterRoute extends ExceptionHandlingRoute {
 
     private static final String CLASS_NAME = SplitterRoute.class.getSimpleName();
 
     private final SplitterConfig splitterConfig;
     private final MessageProcessor messageProcessor;
     private final RatingsTransformer ratingsTransformer;
+    private final String readTopic;
+    private final String writeTopic;
+    private final String fromKafkaTopic;
+    private final String toKafkaTopic;
 
     @Autowired
     public SplitterRoute(final SplitterConfig splitterConfig,
@@ -27,15 +30,14 @@ public class SplitterRoute extends RouteBuilder {
         this.splitterConfig = splitterConfig;
         this.messageProcessor = messageProcessor;
         this.ratingsTransformer = ratingsTransformer;
+        this.readTopic = splitterConfig.getConsumerTopic();
+        this.writeTopic = splitterConfig.getProducerTopic();
+        this.fromKafkaTopic = "kafka:" + readTopic + "?" + buildURIParamsUsing(splitterConfig.getConsumerConfig());
+        this.toKafkaTopic = "kafka:" + writeTopic + "?" + buildURIParamsUsing(splitterConfig.getProducerConfig());
     }
 
     @Override
     public void configure() {
-
-        final String readTopic = splitterConfig.getConsumerTopic();
-        final String writeTopic = splitterConfig.getProducerTopic();
-        final String fromKafkaTopic = "kafka:" + readTopic + "?" + buildURIParamsUsing(splitterConfig.getConsumerConfig());
-        final String toKafkaTopic = "kafka:" + writeTopic + "?" + buildURIParamsUsing(splitterConfig.getProducerConfig());
 
         from(fromKafkaTopic)
                 .log(LoggingLevel.INFO, "Consumed input message from " + readTopic)

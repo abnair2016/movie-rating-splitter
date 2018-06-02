@@ -1,4 +1,4 @@
-package com.anair.demo.component.movieratingsplitter.component;
+package com.anair.demo.component.movieratingsplitter.component.util;
 
 import org.apache.commons.io.IOUtils;
 

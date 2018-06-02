@@ -33,6 +33,8 @@
         <maven-remote-resources-plugin.version>1.5</maven-remote-resources-plugin.version>
         <rest-assured.version>3.0.7</rest-assured.version>
         <swagger.version>2.8.0</swagger.version>
+
+        <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
     </properties>
 
     <dependencyManagement>

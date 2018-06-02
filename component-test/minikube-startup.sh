@@ -85,7 +85,7 @@ while [ "$ready" != "started (kafka.server.KafkaServer)" ]; do
 	printf "%0.s-" {1..1}
 done
 
-# Set up Kfaka Topic
+# Set up Kafka Topic
 echo "Setting up kafka topic..."
 setup_topic
 

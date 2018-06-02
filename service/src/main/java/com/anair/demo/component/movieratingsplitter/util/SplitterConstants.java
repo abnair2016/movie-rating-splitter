@@ -35,6 +35,10 @@ public final class SplitterConstants {
     public static final String KEY_DESERIALIZER = "keyDeserializer";
     public static final String VALUE_DESERIALIZER = "valueDeserializer";
 
+    //Exceptions
+    public static final String EXCEPTION_MESSAGE = "${exception.message}";
+    public static final String EXCEPTION_STACKTRACE = "${exception.stacktrace}";
+
     private SplitterConstants() {
     }
 }
