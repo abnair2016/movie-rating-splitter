@@ -25,7 +25,7 @@ Below are the details on how I went about implementing a basic component test fo
 
 To explain how I incorporated component testing within my workflow, please refer to the <a href="http://www.github.com/abnair2016/movie-rating-splitter" target="_blank">movie-rating-splitter</a> sample project.
 
-![Movie Rating Splitter Service](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/movie-rating-splitter-service-overview-diagram.png){: .centered.medium-8 }
+![Movie Rating Splitter Service](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/movie-rating-splitter-service-overview-diagram.png)
 
 In this project, the `movie-rating-splitter` service (SUT) communicates with an external component i.e. [Kafka](https://kafka.apache.org).
  
@@ -77,7 +77,7 @@ The `component-test` module of the project has the following setups:
     * Lists the topics that were created
     * Opens the minikube dashboard GUI (Screenshot below)
 
-    ![Minikube Dashboard Review](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/minikube-dashboard-screenshot.png){: .centered }
+    ![Minikube Dashboard Review](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/minikube-dashboard-screenshot.png)
 
 2. _**minikube-startup.sh**_
 
@@ -827,17 +827,17 @@ public class MovieRatingsSplitterServiceComponentTest {
 
 You can review whether the Component Tests ran successfully in the logs (Screenshot below)
 
-![Component tests success log screenshot](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/component-test-success-log.png){: .centered }
+![Component tests success log screenshot](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/component-test-success-log.png)
 
 You can also review the details of the message(s) consumed and produced after the Component Tests have run using <a href="http://www.kafkatool.com" target="_blank">Kafka Tool</a>, a free GUI application for managing and using Apache Kafka clusters.
 
 Below is a Kafka Tool screenshot of the message(s) consumed from the `movie-message` topic:
 
-![Kafka tool screenshot of messages in movie-message topic](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/kafka-tool-screenshot-movie-message-topic.png){: .centered }
+![Kafka tool screenshot of messages in movie-message topic](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/kafka-tool-screenshot-movie-message-topic.png)
 
 Below is a Kafka Tool screenshot of the message(s) produced to the `film-ratings-message` topic:
 
-![Kafka tool screenshot of messages in film-ratings-message topic](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/kafka-tool-screenshot-film-ratings-message-topic.png){: .centered }
+![Kafka tool screenshot of messages in film-ratings-message topic](https://github.com/abnair2016/movie-rating-splitter/blob/master/images/kafka-tool-screenshot-film-ratings-message-topic.png)
 
 As you can see from these screenshots of the messages consumed and produced, it's quite intuitive.
 
